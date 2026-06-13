@@ -25,7 +25,7 @@ function App() {
         {activeTab === 'about' && <AboutPage />}
       </main>
       <TabBar activeTab={activeTab} onTabChange={setActiveTab} />
-      {selectedShop && (
+      {activeTab === 'list' && selectedShop && (
         <ShopCard shop={selectedShop} onClose={() => setSelectedShop(null)} />
       )}
     </div>

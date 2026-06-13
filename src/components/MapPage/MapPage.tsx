@@ -94,7 +94,7 @@ export function MapPage({ shops, loading, error }: MapPageProps) {
     if (!el) return;
     if (mapRef.current) return;
 
-    const map = L.map(el, { zoomControl: false }).setView(
+    const map = L.map(el, { zoomControl: false, zoomSnap: 0.5 }).setView(
       [29.56, 106.55],
       11.5
     );
@@ -104,7 +104,6 @@ export function MapPage({ shops, loading, error }: MapPageProps) {
         subdomains: ['1', '2', '3', '4'],
         detectRetina: true,
         maxZoom: 18,
-        zoomSnap: 0.5,
       }
     ).addTo(map);
     mapRef.current = map;

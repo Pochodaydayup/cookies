@@ -3,8 +3,8 @@ import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import type { Shop, CategoryKey } from '../../types'
 import { DISTRICT_CENTERS } from '../../constants'
+import { CATEGORIES, DISTRICTS } from '../../constants'
 import { CategoryBar } from '../CategoryBar/CategoryBar'
-import { ShopCard } from '../ShopCard/ShopCard'
 import styles from './MapPage.module.css'
 
 interface MapPageProps {
@@ -63,7 +63,6 @@ export function MapPage({ shops, loading, error }: MapPageProps) {
   const mapRef = useRef<L.Map | null>(null)
   const markersRef = useRef<L.Marker[]>([])
   const userMarkerRef = useRef<L.Marker | null>(null)
-  const [selectedShop, setSelectedShop] = useState<Shop | null>(null)
   const [activeCategory, setActiveCategory] = useState<CategoryKey | null>(null)
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null)
   const [nearestShops, setNearestShops] = useState<Shop[]>([])
@@ -87,23 +86,18 @@ export function MapPage({ shops, loading, error }: MapPageProps) {
 
     setTimeout(() => map.invalidateSize(), 100)
 
-    // Try to get user location
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (pos) => {
           const { latitude, longitude } = pos.coords
           setUserLocation({ lat: latitude, lng: longitude })
-
           map.setView([latitude, longitude], 15)
 
           if (userMarkerRef.current) userMarkerRef.current.remove()
           userMarkerRef.current = L.marker([latitude, longitude], { icon: createUserIcon() })
             .addTo(map)
-            .bindTooltip('我的位置', { direction: 'top', offset: [0, -12] })
         },
-        () => {
-          // Geolocation failed — stay on default CQ center
-        },
+        () => {},
         { enableHighAccuracy: true, timeout: 10000 }
       )
     }
@@ -114,7 +108,7 @@ export function MapPage({ shops, loading, error }: MapPageProps) {
     }
   }, [])
 
-  // Update nearest shops when user location or shops change
+  // Update nearest shops
   useEffect(() => {
     if (!userLocation || shops.length === 0) {
       setNearestShops([])
@@ -133,7 +127,7 @@ export function MapPage({ shops, loading, error }: MapPageProps) {
     setNearestShops(sorted)
   }, [userLocation, shops])
 
-  // Update shop markers
+  // Update shop markers with popup tooltips
   useEffect(() => {
     const map = mapRef.current
     if (!map || shops.length === 0) return
@@ -148,18 +142,39 @@ export function MapPage({ shops, loading, error }: MapPageProps) {
     const icon = createShopIcon()
 
     filtered.forEach((shop) => {
+      const popupContent = `
+        <div style="
+          font-family: 'Noto Sans SC', 'PingFang SC', sans-serif;
+          min-width: 180px;
+          padding: 2px 0;
+        ">
+          <div style="font-size:15px; font-weight:700; color:#1a1a2e; margin-bottom:4px;">${shop.name}</div>
+          <div style="display:inline-block; padding:2px 8px; border-radius:8px; background:rgba(212,32,39,0.08); color:#d42027; font-size:11px; font-weight:600; margin-bottom:6px;">${CATEGORIES[shop.category]}</div>
+          <div style="font-size:13px; color:#6b7280; margin-bottom:4px;">${DISTRICTS[shop.district]} ${shop.address}</div>
+          <div style="font-size:13px; color:#1a1a2e; margin-bottom:4px;">${shop.description}</div>
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-top:6px;">
+            <span style="font-size:12px; color:#6b7280;">${shop.businessHours}</span>
+            <span style="font-size:14px; font-weight:700; color:#d42027;">¥${shop.avgPrice}/人</span>
+          </div>
+        </div>
+      `
+
       const marker = L.marker([shop.location.lat, shop.location.lng], { icon })
-        .on('click', () => setSelectedShop(shop))
+        .bindPopup(popupContent, {
+          closeButton: false,
+          offset: [0, -10],
+          className: styles.shopPopup,
+        })
         .addTo(map)
+
       markersRef.current.push(marker)
     })
 
-    if (filtered.length > 0) {
+    if (filtered.length > 0 && !userLocation) {
       const group = L.featureGroup(markersRef.current)
       map.fitBounds(group.getBounds().pad(0.1))
     }
 
-    // If user has location, re-center on user after showing markers
     if (userLocation) {
       map.setView([userLocation.lat, userLocation.lng], 15)
     }
@@ -197,8 +212,12 @@ export function MapPage({ shops, loading, error }: MapPageProps) {
                 key={shop.id}
                 className={styles.nearestItem}
                 onClick={() => {
-                  setSelectedShop(shop)
                   mapRef.current?.setView([shop.location.lat, shop.location.lng], 17)
+                  // Open the popup for this shop
+                  const marker = markersRef.current.find(
+                    (m) => m.getLatLng().lat === shop.location.lat && m.getLatLng().lng === shop.location.lng
+                  )
+                  marker?.openPopup()
                 }}
               >
                 <span className={styles.nearestIndex}>{i + 1}</span>
@@ -210,10 +229,6 @@ export function MapPage({ shops, loading, error }: MapPageProps) {
             ))}
           </div>
         </div>
-      )}
-
-      {selectedShop && (
-        <ShopCard shop={selectedShop} onClose={() => setSelectedShop(null)} />
       )}
     </div>
   )

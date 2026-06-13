@@ -1,0 +1,18 @@
+.loading {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.loadingText {
+  color: var(--color-neon-cyan);
+  font-size: 16px;
+  animation: loadPulse 1.2s ease-in-out infinite;
+}
+
+@keyframes loadPulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 1; }
+}

@@ -1,0 +1,43 @@
+.tabBar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  height: 56px;
+  background: rgba(10, 10, 26, 0.95);
+  backdrop-filter: blur(12px);
+  border-top: 1px solid rgba(0, 240, 255, 0.15);
+  z-index: 100;
+  padding-bottom: env(safe-area-inset-bottom, 0);
+}
+
+.tab {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  background: none;
+  border: none;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition: color 0.2s;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.tab.active {
+  color: var(--color-neon-cyan);
+  text-shadow: 0 0 8px rgba(0, 240, 255, 0.5);
+}
+
+.icon {
+  font-size: 20px;
+  line-height: 1;
+}
+
+.label {
+  font-size: 11px;
+  font-weight: 500;
+}

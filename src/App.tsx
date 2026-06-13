@@ -1,9 +1,33 @@
+import { useState } from 'react'
+import type { TabKey, Shop } from './types'
+import { TabBar } from './components/TabBar/TabBar'
+import { MapPage } from './components/MapPage/MapPage'
+import { ListPage } from './components/ListPage/ListPage'
+import { AboutPage } from './components/AboutPage/AboutPage'
+import { ShopCard } from './components/ShopCard/ShopCard'
+import { useShops } from './hooks/useShops'
 import './styles/global.css'
 
 function App() {
+  const [activeTab, setActiveTab] = useState<TabKey>('map')
+  const { shops, loading, error } = useShops()
+  const [selectedShop, setSelectedShop] = useState<Shop | null>(null)
+
   return (
-    <div style={{ padding: 24, textAlign: 'center', color: 'var(--color-neon-cyan)' }}>
-      重庆本地美食地图
+    <div className="app-container">
+      <main className="app-content">
+        {activeTab === 'map' && (
+          <MapPage shops={shops} loading={loading} error={error} />
+        )}
+        {activeTab === 'list' && (
+          <ListPage shops={shops} onShopClick={setSelectedShop} />
+        )}
+        {activeTab === 'about' && <AboutPage />}
+      </main>
+      <TabBar activeTab={activeTab} onTabChange={setActiveTab} />
+      {selectedShop && (
+        <ShopCard shop={selectedShop} onClose={() => setSelectedShop(null)} />
+      )}
     </div>
   )
 }

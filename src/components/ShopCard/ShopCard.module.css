@@ -1,0 +1,141 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  z-index: 200;
+  animation: fadeIn 0.2s ease;
+}
+
+.card {
+  width: 100%;
+  max-width: 480px;
+  max-height: 70vh;
+  overflow-y: auto;
+  background: rgba(20, 20, 40, 0.92);
+  backdrop-filter: blur(20px);
+  border-radius: 20px 20px 0 0;
+  border: 1px solid rgba(0, 240, 255, 0.15);
+  border-bottom: none;
+  padding: 24px 20px 36px;
+  position: relative;
+  animation: slideUp 0.3s ease;
+}
+
+.closeBtn {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--color-text-secondary);
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.closeBtn:hover {
+  background: rgba(255, 45, 120, 0.2);
+  border-color: var(--color-neon-magenta);
+  color: var(--color-neon-magenta);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.name {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--color-text-primary);
+  letter-spacing: 0.5px;
+}
+
+.categoryTag {
+  padding: 3px 10px;
+  border-radius: 12px;
+  background: rgba(255, 45, 120, 0.15);
+  color: var(--color-neon-magenta);
+  font-size: 12px;
+  font-weight: 600;
+  border: 1px solid rgba(255, 45, 120, 0.3);
+}
+
+.description {
+  font-size: 14px;
+  color: var(--color-text-secondary);
+  margin-bottom: 16px;
+  line-height: 1.5;
+}
+
+.infoGrid {
+  display: grid;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.infoItem {
+  display: flex;
+  gap: 8px;
+}
+
+.infoLabel {
+  flex-shrink: 0;
+  color: var(--color-neon-cyan);
+  font-size: 13px;
+  font-weight: 600;
+  min-width: 56px;
+}
+
+.infoValue {
+  color: var(--color-text-primary);
+  font-size: 13px;
+}
+
+.dishes {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.dishesLabel {
+  color: var(--color-neon-cyan);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.dishTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.dishTag {
+  padding: 4px 12px;
+  border-radius: 14px;
+  background: rgba(0, 240, 255, 0.08);
+  border: 1px solid rgba(0, 240, 255, 0.2);
+  color: var(--color-neon-cyan);
+  font-size: 12px;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}

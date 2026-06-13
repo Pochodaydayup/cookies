@@ -1,0 +1,76 @@
+{
+  "shops": [
+    {
+      "id": "1",
+      "name": "老灶火锅",
+      "category": "hotpot",
+      "district": "yuzhong",
+      "address": "渝中区解放碑某巷12号",
+      "description": "正宗老火锅，麻辣鲜香，本地人排队也要吃",
+      "avgPrice": 85,
+      "recommendDishes": ["毛肚", "鸭肠", "老肉片"],
+      "businessHours": "11:00-23:00",
+      "location": { "lng": 106.5789, "lat": 29.5584 }
+    },
+    {
+      "id": "2",
+      "name": "胖妹面庄",
+      "category": "noodles",
+      "district": "yuzhong",
+      "address": "渝中区较场口日月光中心旁",
+      "description": "重庆小面的天花板，早上六点就排队",
+      "avgPrice": 15,
+      "recommendDishes": ["豌杂面", "牛肉面"],
+      "businessHours": "06:00-14:00",
+      "location": { "lng": 106.5810, "lat": 29.5560 }
+    },
+    {
+      "id": "3",
+      "name": "何王氏串串",
+      "category": "chuanchuan",
+      "district": "jiangbei",
+      "address": "江北区观音桥建新东路",
+      "description": "串串香老店，味道巴适得很",
+      "avgPrice": 60,
+      "recommendDishes": ["牛肉串", "脑花"],
+      "businessHours": "16:00-02:00",
+      "location": { "lng": 106.5743, "lat": 29.6063 }
+    },
+    {
+      "id": "4",
+      "name": "烤匠烧烤",
+      "category": "bbq",
+      "district": "nanan",
+      "address": "南岸区南坪步行街",
+      "description": "深夜烧烤的灵魂归属",
+      "avgPrice": 55,
+      "recommendDishes": ["烤脑花", "烤苕皮", "烤豆干"],
+      "businessHours": "18:00-03:00",
+      "location": { "lng": 106.5614, "lat": 29.5234 }
+    },
+    {
+      "id": "5",
+      "name": "杨记江湖菜",
+      "category": "jianghu",
+      "district": "shapinba",
+      "address": "沙坪坝区三峡广场后巷",
+      "description": "正宗江湖菜，量大味足",
+      "avgPrice": 70,
+      "recommendDishes": ["辣子鸡", "水煮鱼"],
+      "businessHours": "11:00-22:00",
+      "location": { "lng": 106.4582, "lat": 29.5411 }
+    },
+    {
+      "id": "6",
+      "name": "冰粉婆婆",
+      "category": "dessert",
+      "district": "yuzhong",
+      "address": "渝中区十八梯",
+      "description": "手工冰粉，夏天必来一碗",
+      "avgPrice": 8,
+      "recommendDishes": ["冰粉", "凉糕"],
+      "businessHours": "09:00-21:00",
+      "location": { "lng": 106.5760, "lat": 29.5540 }
+    }
+  ]
+}

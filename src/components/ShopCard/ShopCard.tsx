@@ -1,5 +1,6 @@
 import type { Shop } from '../../types'
 import { CATEGORIES, DISTRICTS } from '../../constants'
+import { MapPin, Clock, X } from 'lucide-react'
 import styles from './ShopCard.module.css'
 
 interface ShopCardProps {
@@ -12,7 +13,7 @@ export function ShopCard({ shop, onClose }: ShopCardProps) {
     <div className={styles.overlay} onClick={onClose}>
       <div className={styles.card} onClick={(e) => e.stopPropagation()}>
         <button className={styles.closeBtn} onClick={onClose} aria-label="关闭">
-          ✕
+          <X size={16} />
         </button>
 
         <div className={styles.header}>
@@ -24,16 +25,15 @@ export function ShopCard({ shop, onClose }: ShopCardProps) {
 
         <div className={styles.infoGrid}>
           <div className={styles.infoItem}>
-            <span className={styles.infoLabel}>地址</span>
+            <MapPin size={14} className={styles.infoIcon} />
             <span className={styles.infoValue}>{DISTRICTS[shop.district]} {shop.address}</span>
           </div>
           <div className={styles.infoItem}>
-            <span className={styles.infoLabel}>营业时间</span>
+            <Clock size={14} className={styles.infoIcon} />
             <span className={styles.infoValue}>{shop.businessHours}</span>
           </div>
           <div className={styles.infoItem}>
-            <span className={styles.infoLabel}>人均</span>
-            <span className={styles.infoValue}>¥{shop.avgPrice}</span>
+            <span className={styles.priceTag}>¥{shop.avgPrice}/人</span>
           </div>
         </div>
 

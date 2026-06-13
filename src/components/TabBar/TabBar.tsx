@@ -1,4 +1,5 @@
 import type { TabKey } from '../../types'
+import { Map, List, Info } from 'lucide-react'
 import styles from './TabBar.module.css'
 
 interface TabBarProps {
@@ -6,23 +7,23 @@ interface TabBarProps {
   onTabChange: (tab: TabKey) => void
 }
 
-const TABS: { key: TabKey; label: string; icon: string }[] = [
-  { key: 'map', label: '地图', icon: '🗺️' },
-  { key: 'list', label: '列表', icon: '📋' },
-  { key: 'about', label: '关于', icon: '💡' },
+const TABS: { key: TabKey; label: string; Icon: typeof Map }[] = [
+  { key: 'map', label: '地图', Icon: Map },
+  { key: 'list', label: '列表', Icon: List },
+  { key: 'about', label: '关于', Icon: Info },
 ]
 
 export function TabBar({ activeTab, onTabChange }: TabBarProps) {
   return (
     <nav className={styles.tabBar}>
-      {TABS.map((tab) => (
+      {TABS.map(({ key, label, Icon }) => (
         <button
-          key={tab.key}
-          className={`${styles.tab} ${activeTab === tab.key ? styles.active : ''}`}
-          onClick={() => onTabChange(tab.key)}
+          key={key}
+          className={`${styles.tab} ${activeTab === key ? styles.active : ''}`}
+          onClick={() => onTabChange(key)}
         >
-          <span className={styles.icon}>{tab.icon}</span>
-          <span className={styles.label}>{tab.label}</span>
+          <Icon size={20} strokeWidth={activeTab === key ? 2.5 : 1.8} />
+          <span className={styles.label}>{label}</span>
         </button>
       ))}
     </nav>

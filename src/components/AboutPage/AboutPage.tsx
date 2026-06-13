@@ -1,12 +1,16 @@
+import { Heart, Github, MapPin } from 'lucide-react'
 import styles from './AboutPage.module.css'
 
 export function AboutPage() {
   return (
     <div className={styles.container}>
-      <h1 className={styles.title}>重庆本地人才知道的吃的</h1>
-      <p className={styles.subtitle}>
-        🌶️ 一个赛博朋克风格的重庆本地美食地图
-      </p>
+      <div className={styles.hero}>
+        <div className={styles.iconWrap}>
+          <MapPin size={32} color="#DC2626" />
+        </div>
+        <h1 className={styles.title}>重庆本地人才知道的吃的</h1>
+        <p className={styles.subtitle}>藏在巷子里的真味道</p>
+      </div>
 
       <div className={styles.section}>
         <h2 className={styles.sectionTitle}>关于项目</h2>
@@ -27,13 +31,14 @@ export function AboutPage() {
       <div className={styles.section}>
         <h2 className={styles.sectionTitle}>技术实现</h2>
         <p className={styles.text}>
-          纯静态 SPA 架构，使用 React + TypeScript 构建，高德地图提供地图服务，
+          React + TypeScript 构建，Leaflet 提供地图服务，
           Decap CMS 管理内容，部署在 Cloudflare Pages。
         </p>
       </div>
 
       <div className={styles.footer}>
-        Made with ❤️ in 重庆
+        <Heart size={14} style={{ verticalAlign: -2, marginRight: 4, color: '#DC2626' }} />
+        Made in 重庆
       </div>
     </div>
   )

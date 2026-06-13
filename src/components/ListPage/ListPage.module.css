@@ -1,32 +1,54 @@
 .container {
   width: 100%;
   min-height: 100vh;
-  padding: 16px 16px 80px;
+  padding: 0 16px 80px;
   background: var(--color-bg);
 }
 
-.searchBar {
+.header {
+  padding: 20px 0 12px;
+}
+
+.title {
+  font-size: 24px;
+  font-weight: 900;
+  color: var(--color-text);
   margin-bottom: 12px;
+}
+
+.searchBar {
+  position: relative;
+}
+
+.searchIcon {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--color-text-muted);
+  pointer-events: none;
 }
 
 .searchInput {
   width: 100%;
-  padding: 10px 16px;
-  border-radius: 24px;
-  border: 1px solid var(--color-border);
-  background: #ffffff;
-  color: var(--color-text-primary);
+  padding: 10px 16px 10px 40px;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border-light);
+  background: var(--color-card);
+  color: var(--color-text);
   font-size: 14px;
+  font-family: var(--font-body);
   outline: none;
   transition: border-color 0.2s;
 }
 
 .searchInput::placeholder {
-  color: var(--color-text-secondary);
+  color: var(--color-text-muted);
 }
 
 .searchInput:focus {
   border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.08);
 }
 
 .filters {
@@ -36,31 +58,38 @@
 .districtSelect {
   width: 100%;
   padding: 8px 12px;
-  border-radius: 12px;
-  border: 1px solid var(--color-border);
-  background: #ffffff;
-  color: var(--color-text-primary);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border-light);
+  background: var(--color-card);
+  color: var(--color-text);
   font-size: 14px;
+  font-family: var(--font-body);
   outline: none;
   appearance: none;
   cursor: pointer;
 }
 
 .districtSelect option {
-  background: #ffffff;
-  color: var(--color-text-primary);
+  background: var(--color-card);
+  color: var(--color-text);
 }
 
 .list {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
   margin-top: 12px;
 }
 
 .empty {
   text-align: center;
-  padding: 40px 0;
-  color: var(--color-text-secondary);
+  padding: 48px 0;
+  color: var(--color-text-muted);
   font-size: 14px;
+}
+
+.emptyHint {
+  font-size: 12px;
+  margin-top: 6px;
+  color: var(--color-text-muted);
 }

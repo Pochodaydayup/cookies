@@ -1,7 +1,7 @@
 .overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.3);
+  background: rgba(69, 10, 10, 0.2);
   display: flex;
   align-items: flex-end;
   justify-content: center;
@@ -14,8 +14,8 @@
   max-width: 480px;
   max-height: 70vh;
   overflow-y: auto;
-  background: #ffffff;
-  border-radius: 20px 20px 0 0;
+  background: var(--color-card);
+  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
   padding: 24px 20px 36px;
   position: relative;
   animation: slideUp 0.3s ease;
@@ -29,9 +29,8 @@
   height: 28px;
   border-radius: 50%;
   border: 1px solid var(--color-border);
-  background: #f5f5f7;
-  color: var(--color-text-secondary);
-  font-size: 14px;
+  background: var(--color-bg);
+  color: var(--color-text-muted);
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -41,7 +40,7 @@
 
 .closeBtn:hover {
   background: var(--color-primary-light);
-  border-color: var(--color-primary-border);
+  border-color: var(--color-primary);
   color: var(--color-primary);
 }
 
@@ -54,14 +53,14 @@
 
 .name {
   font-size: 22px;
-  font-weight: 800;
-  color: var(--color-text-primary);
+  font-weight: 900;
+  color: var(--color-text);
   letter-spacing: 0.5px;
 }
 
 .categoryTag {
   padding: 3px 10px;
-  border-radius: 12px;
+  border-radius: var(--radius-sm);
   background: var(--color-primary-light);
   color: var(--color-primary);
   font-size: 12px;
@@ -72,31 +71,36 @@
   font-size: 14px;
   color: var(--color-text-secondary);
   margin-bottom: 16px;
-  line-height: 1.5;
+  line-height: 1.6;
 }
 
 .infoGrid {
-  display: grid;
-  gap: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
   margin-bottom: 16px;
 }
 
 .infoItem {
   display: flex;
-  gap: 8px;
+  align-items: center;
+  gap: 6px;
 }
 
-.infoLabel {
-  flex-shrink: 0;
+.infoIcon {
   color: var(--color-primary);
-  font-size: 13px;
-  font-weight: 600;
-  min-width: 56px;
+  flex-shrink: 0;
 }
 
 .infoValue {
-  color: var(--color-text-primary);
+  color: var(--color-text);
   font-size: 13px;
+}
+
+.priceTag {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--color-cta);
 }
 
 .dishes {
@@ -106,9 +110,9 @@
 }
 
 .dishesLabel {
-  color: var(--color-primary);
   font-size: 13px;
   font-weight: 600;
+  color: var(--color-text-secondary);
 }
 
 .dishTags {
@@ -123,6 +127,7 @@
   background: var(--color-primary-light);
   color: var(--color-primary);
   font-size: 12px;
+  font-weight: 500;
 }
 
 @keyframes fadeIn {

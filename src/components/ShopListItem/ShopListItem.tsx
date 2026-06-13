@@ -1,5 +1,6 @@
 import type { Shop } from '../../types'
 import { CATEGORIES, DISTRICTS } from '../../constants'
+import { MapPin } from 'lucide-react'
 import styles from './ShopListItem.module.css'
 
 interface ShopListItemProps {
@@ -16,7 +17,10 @@ export function ShopListItem({ shop, onClick }: ShopListItemProps) {
       </div>
       <div className={styles.meta}>
         <span className={styles.categoryTag}>{CATEGORIES[shop.category]}</span>
-        <span className={styles.district}>{DISTRICTS[shop.district]}</span>
+        <span className={styles.district}>
+          <MapPin size={11} style={{ marginRight: 2, verticalAlign: -1 }} />
+          {DISTRICTS[shop.district]}
+        </span>
       </div>
       <p className={styles.description}>{shop.description}</p>
     </button>

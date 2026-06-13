@@ -4,6 +4,7 @@ import 'leaflet/dist/leaflet.css'
 import type { Shop, CategoryKey } from '../../types'
 import { CATEGORIES, DISTRICTS } from '../../constants'
 import { CategoryBar } from '../CategoryBar/CategoryBar'
+import { Navigation, Layers } from 'lucide-react'
 import styles from './MapPage.module.css'
 
 interface MapPageProps {
@@ -19,9 +20,9 @@ function createShopIcon() {
       width: 16px;
       height: 16px;
       border-radius: 50%;
-      background: #d42027;
-      border: 2px solid #fff;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+      background: #DC2626;
+      border: 2.5px solid #fff;
+      box-shadow: 0 2px 6px rgba(220,38,38,0.35);
     "></div>`,
     iconSize: [16, 16],
     iconAnchor: [8, 8],
@@ -36,9 +37,9 @@ function createUserIcon() {
       width: 18px;
       height: 18px;
       border-radius: 50%;
-      background: #3b82f6;
+      background: #3B82F6;
       border: 3px solid #fff;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+      box-shadow: 0 0 0 3px rgba(59,130,246,0.2);
     "></div>`,
     iconSize: [18, 18],
     iconAnchor: [9, 9],
@@ -73,7 +74,6 @@ export function MapPage({ shops, loading, error }: MapPageProps) {
       zoomControl: false,
     }).setView([29.56, 106.55], 12)
 
-    // Flat muted tile style similar to Amap
     L.tileLayer('https://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=8&x={x}&y={y}&z={z}', {
       subdomains: ['1', '2', '3', '4'],
       attribution: '&copy; 高德地图',
@@ -139,19 +139,20 @@ export function MapPage({ shops, loading, error }: MapPageProps) {
     const icon = createShopIcon()
 
     filtered.forEach((shop) => {
+      const dist = userLocation
+        ? getDistance(userLocation.lat, userLocation.lng, shop.location.lat, shop.location.lng)
+        : null
+
       const popupContent = `
-        <div style="
-          font-family: 'Noto Sans SC', 'PingFang SC', sans-serif;
-          min-width: 180px;
-          padding: 2px 0;
-        ">
-          <div style="font-size:15px; font-weight:700; color:#1a1a2e; margin-bottom:4px;">${shop.name}</div>
-          <div style="display:inline-block; padding:2px 8px; border-radius:8px; background:rgba(212,32,39,0.08); color:#d42027; font-size:11px; font-weight:600; margin-bottom:6px;">${CATEGORIES[shop.category]}</div>
-          <div style="font-size:13px; color:#6b7280; margin-bottom:4px;">${DISTRICTS[shop.district]} ${shop.address}</div>
-          <div style="font-size:13px; color:#1a1a2e; margin-bottom:4px;">${shop.description}</div>
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-top:6px;">
-            <span style="font-size:12px; color:#6b7280;">${shop.businessHours}</span>
-            <span style="font-size:14px; font-weight:700; color:#d42027;">¥${shop.avgPrice}/人</span>
+        <div style="font-family:'Noto Sans SC','PingFang SC',sans-serif; min-width:200px; padding:2px 0;">
+          <div style="font-size:16px; font-weight:700; color:#450A0A; margin-bottom:4px;">${shop.name}</div>
+          <span style="display:inline-block; padding:2px 8px; border-radius:6px; background:#FEF2F2; color:#DC2626; font-size:11px; font-weight:600; margin-bottom:8px;">${CATEGORIES[shop.category]}</span>
+          ${dist !== null ? `<span style="display:inline-block; padding:2px 8px; border-radius:6px; background:#FEF9C3; color:#CA8A04; font-size:11px; font-weight:600; margin-left:4px; margin-bottom:8px;">${dist < 1 ? Math.round(dist * 1000) + 'm' : dist.toFixed(1) + 'km'}</span>` : ''}
+          <div style="font-size:13px; color:#7F1D1D; margin-bottom:4px;">${DISTRICTS[shop.district]} ${shop.address}</div>
+          <div style="font-size:13px; color:#450A0A; margin-bottom:6px;">${shop.description}</div>
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <span style="font-size:12px; color:#9CA3AF;">${shop.businessHours}</span>
+            <span style="font-size:14px; font-weight:700; color:#CA8A04;">¥${shop.avgPrice}/人</span>
           </div>
         </div>
       `
@@ -176,6 +177,12 @@ export function MapPage({ shops, loading, error }: MapPageProps) {
     }
   }, [shops, activeCategory, userLocation])
 
+  const handleLocateMe = () => {
+    if (userLocation && mapRef.current) {
+      mapRef.current.setView([userLocation.lat, userLocation.lng], 16)
+    }
+  }
+
   if (loading) {
     return (
       <div className={styles.loading}>
@@ -199,9 +206,13 @@ export function MapPage({ shops, loading, error }: MapPageProps) {
       </div>
       <div ref={mapContainerRef} className={styles.map} />
 
+      <button className={styles.locateBtn} onClick={handleLocateMe} aria-label="定位到我的位置">
+        <Navigation size={18} />
+      </button>
+
       {nearestShops.length > 0 && (
         <div className={styles.nearestPanel}>
-          <div className={styles.nearestTitle}>📍 离你最近的店</div>
+          <div className={styles.nearestTitle}>离你最近</div>
           <div className={styles.nearestList}>
             {nearestShops.slice(0, 3).map((shop, i) => (
               <button
@@ -220,6 +231,7 @@ export function MapPage({ shops, loading, error }: MapPageProps) {
                   <span className={styles.nearestName}>{shop.name}</span>
                   <span className={styles.nearestAddr}>{shop.address}</span>
                 </div>
+                <span className={styles.nearestPrice}>¥{shop.avgPrice}</span>
               </button>
             ))}
           </div>

@@ -1,6 +1,7 @@
 import { useState, useMemo } from 'react'
 import type { Shop, DistrictKey, CategoryKey } from '../../types'
 import { DISTRICTS } from '../../constants'
+import { Search } from 'lucide-react'
 import { CategoryBar } from '../CategoryBar/CategoryBar'
 import { ShopListItem } from '../ShopListItem/ShopListItem'
 import styles from './ListPage.module.css'
@@ -33,14 +34,18 @@ export function ListPage({ shops, onShopClick }: ListPageProps) {
 
   return (
     <div className={styles.container}>
-      <div className={styles.searchBar}>
-        <input
-          className={styles.searchInput}
-          type="text"
-          placeholder="搜索店名、地址..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-        />
+      <div className={styles.header}>
+        <h1 className={styles.title}>全部店铺</h1>
+        <div className={styles.searchBar}>
+          <Search size={16} className={styles.searchIcon} />
+          <input
+            className={styles.searchInput}
+            type="text"
+            placeholder="搜索店名、地址..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+        </div>
       </div>
 
       <div className={styles.filters}>
@@ -61,7 +66,10 @@ export function ListPage({ shops, onShopClick }: ListPageProps) {
 
       <div className={styles.list}>
         {filteredShops.length === 0 ? (
-          <div className={styles.empty}>没有找到匹配的店铺</div>
+          <div className={styles.empty}>
+            <p>没有找到匹配的店铺</p>
+            <p className={styles.emptyHint}>试试其他关键词或筛选条件</p>
+          </div>
         ) : (
           filteredShops.map((shop) => (
             <ShopListItem key={shop.id} shop={shop} onClick={onShopClick} />

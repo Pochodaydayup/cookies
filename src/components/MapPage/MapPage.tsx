@@ -12,32 +12,36 @@ interface MapPageProps {
   error: string | null
 }
 
-function createLocationIcon(color: string = '#d42027') {
+function createShopIcon() {
   return L.divIcon({
     className: '',
-    html: `
-      <svg width="28" height="36" viewBox="0 0 28 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M14 0C6.268 0 0 6.268 0 14c0 10.5 14 22 14 22s14-11.5 14-22C28 6.268 21.732 0 14 0z" fill="${color}"/>
-        <circle cx="14" cy="13" r="6" fill="#fff"/>
-      </svg>
-    `,
-    iconSize: [28, 36],
-    iconAnchor: [14, 36],
-    popupAnchor: [0, -36],
+    html: `<div style="
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: #d42027;
+      border: 2px solid #fff;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    "></div>`,
+    iconSize: [16, 16],
+    iconAnchor: [8, 8],
+    popupAnchor: [0, -12],
   })
 }
 
 function createUserIcon() {
   return L.divIcon({
     className: '',
-    html: `
-      <svg width="28" height="36" viewBox="0 0 28 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M14 0C6.268 0 0 6.268 0 14c0 10.5 14 22 14 22s14-11.5 14-22C28 6.268 21.732 0 14 0z" fill="#3b82f6"/>
-        <circle cx="14" cy="13" r="6" fill="#fff"/>
-      </svg>
-    `,
-    iconSize: [28, 36],
-    iconAnchor: [14, 36],
+    html: `<div style="
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #3b82f6;
+      border: 3px solid #fff;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    "></div>`,
+    iconSize: [18, 18],
+    iconAnchor: [9, 9],
   })
 }
 
@@ -69,9 +73,11 @@ export function MapPage({ shops, loading, error }: MapPageProps) {
       zoomControl: false,
     }).setView([29.56, 106.55], 12)
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-      maxZoom: 19,
+    // Flat muted tile style similar to Amap
+    L.tileLayer('https://webrd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=8&x={x}&y={y}&z={z}', {
+      subdomains: ['1', '2', '3', '4'],
+      attribution: '&copy; 高德地图',
+      maxZoom: 18,
     }).addTo(map)
 
     L.control.zoom({ position: 'bottomright' }).addTo(map)
@@ -130,7 +136,7 @@ export function MapPage({ shops, loading, error }: MapPageProps) {
       ? shops.filter((s) => s.category === activeCategory)
       : shops
 
-    const icon = createLocationIcon()
+    const icon = createShopIcon()
 
     filtered.forEach((shop) => {
       const popupContent = `

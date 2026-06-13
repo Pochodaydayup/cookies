@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from 'react'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import type { Shop, CategoryKey } from '../../types'
-import { DISTRICT_CENTERS } from '../../constants'
 import { CATEGORIES, DISTRICTS } from '../../constants'
 import { CategoryBar } from '../CategoryBar/CategoryBar'
 import styles from './MapPage.module.css'
@@ -13,36 +12,32 @@ interface MapPageProps {
   error: string | null
 }
 
-function createShopIcon() {
+function createLocationIcon(color: string = '#d42027') {
   return L.divIcon({
     className: '',
-    html: `<div style="
-      width: 16px;
-      height: 16px;
-      border-radius: 50%;
-      background: #d42027;
-      border: 2px solid #fff;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
-    "></div>`,
-    iconSize: [16, 16],
-    iconAnchor: [8, 8],
+    html: `
+      <svg width="28" height="36" viewBox="0 0 28 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M14 0C6.268 0 0 6.268 0 14c0 10.5 14 22 14 22s14-11.5 14-22C28 6.268 21.732 0 14 0z" fill="${color}"/>
+        <circle cx="14" cy="13" r="6" fill="#fff"/>
+      </svg>
+    `,
+    iconSize: [28, 36],
+    iconAnchor: [14, 36],
+    popupAnchor: [0, -36],
   })
 }
 
 function createUserIcon() {
   return L.divIcon({
     className: '',
-    html: `<div style="
-      width: 18px;
-      height: 18px;
-      border-radius: 50%;
-      background: #3b82f6;
-      border: 3px solid #fff;
-      box-shadow: 0 0 0 2px rgba(59,130,246,0.3), 0 2px 6px rgba(0,0,0,0.2);
-      animation: userPulse 2s ease-in-out infinite;
-    "></div>`,
-    iconSize: [18, 18],
-    iconAnchor: [9, 9],
+    html: `
+      <svg width="28" height="36" viewBox="0 0 28 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M14 0C6.268 0 0 6.268 0 14c0 10.5 14 22 14 22s14-11.5 14-22C28 6.268 21.732 0 14 0z" fill="#3b82f6"/>
+        <circle cx="14" cy="13" r="6" fill="#fff"/>
+      </svg>
+    `,
+    iconSize: [28, 36],
+    iconAnchor: [14, 36],
   })
 }
 
@@ -67,7 +62,6 @@ export function MapPage({ shops, loading, error }: MapPageProps) {
   const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null)
   const [nearestShops, setNearestShops] = useState<Shop[]>([])
 
-  // Initialize map
   useEffect(() => {
     if (!mapContainerRef.current || mapRef.current) return
 
@@ -83,7 +77,6 @@ export function MapPage({ shops, loading, error }: MapPageProps) {
     L.control.zoom({ position: 'bottomright' }).addTo(map)
 
     mapRef.current = map
-
     setTimeout(() => map.invalidateSize(), 100)
 
     if (navigator.geolocation) {
@@ -108,7 +101,6 @@ export function MapPage({ shops, loading, error }: MapPageProps) {
     }
   }, [])
 
-  // Update nearest shops
   useEffect(() => {
     if (!userLocation || shops.length === 0) {
       setNearestShops([])
@@ -127,7 +119,6 @@ export function MapPage({ shops, loading, error }: MapPageProps) {
     setNearestShops(sorted)
   }, [userLocation, shops])
 
-  // Update shop markers with popup tooltips
   useEffect(() => {
     const map = mapRef.current
     if (!map || shops.length === 0) return
@@ -139,7 +130,7 @@ export function MapPage({ shops, loading, error }: MapPageProps) {
       ? shops.filter((s) => s.category === activeCategory)
       : shops
 
-    const icon = createShopIcon()
+    const icon = createLocationIcon()
 
     filtered.forEach((shop) => {
       const popupContent = `
@@ -162,7 +153,6 @@ export function MapPage({ shops, loading, error }: MapPageProps) {
       const marker = L.marker([shop.location.lat, shop.location.lng], { icon })
         .bindPopup(popupContent, {
           closeButton: false,
-          offset: [0, -10],
           className: styles.shopPopup,
         })
         .addTo(map)
@@ -213,7 +203,6 @@ export function MapPage({ shops, loading, error }: MapPageProps) {
                 className={styles.nearestItem}
                 onClick={() => {
                   mapRef.current?.setView([shop.location.lat, shop.location.lng], 17)
-                  // Open the popup for this shop
                   const marker = markersRef.current.find(
                     (m) => m.getLatLng().lat === shop.location.lat && m.getLatLng().lng === shop.location.lng
                   )

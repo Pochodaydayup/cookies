@@ -15,7 +15,6 @@ interface DistrictMapProps {
   onBack: () => void
 }
 
-// Neon marker icon using divIcon
 function createNeonIcon() {
   return L.divIcon({
     className: '',
@@ -53,7 +52,6 @@ export function DistrictMap({
       zoomControl: false,
     }).setView([center.lat, center.lng], 14)
 
-    // Dark tile layer (CartoDB Dark Matter)
     L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/">CARTO</a>',
       subdomains: 'abcd',
@@ -64,15 +62,19 @@ export function DistrictMap({
 
     mapRef.current = map
 
+    // Force a size recalculation after mount
+    setTimeout(() => map.invalidateSize(), 100)
+
     return () => {
       map.remove()
       mapRef.current = null
     }
   }, [district])
 
-  // Update markers when shops or category change
+  // Update markers
   useEffect(() => {
-    if (!mapRef.current) return
+    const map = mapRef.current
+    if (!map) return
 
     markersRef.current.forEach((m) => m.remove())
     markersRef.current = []
@@ -86,13 +88,13 @@ export function DistrictMap({
     filtered.forEach((shop) => {
       const marker = L.marker([shop.location.lat, shop.location.lng], { icon })
         .on('click', () => setSelectedShop(shop))
-        .addTo(mapRef.current!)
+        .addTo(map)
       markersRef.current.push(marker)
     })
 
     if (filtered.length > 0) {
       const group = L.featureGroup(markersRef.current)
-      mapRef.current.fitBounds(group.getBounds().pad(0.1))
+      map.fitBounds(group.getBounds().pad(0.1))
     }
   }, [shops, activeCategory])
 

@@ -45,11 +45,14 @@ describe('DISTRICT_CENTERS', () => {
 
 describe('COLORS', () => {
   it('has required color values', () => {
-    expect(COLORS.neonMagenta).toBe('#ff2d78')
-    expect(COLORS.neonCyan).toBe('#00f0ff')
-    expect(COLORS.bg).toBe('#0a0a1a')
-    expect(COLORS.cardBg).toBe('rgba(20, 20, 40, 0.85)')
-    expect(COLORS.textPrimary).toBe('#e0e0e8')
-    expect(COLORS.textSecondary).toBe('#8888aa')
+    expect(COLORS.primary).toBe('#DC2626')
+    expect(COLORS.primaryLight).toBe('#FEF2F2')
+    expect(COLORS.cta).toBe('#CA8A04')
+    expect(COLORS.bg).toBe('#FFFBFB')
+    expect(COLORS.card).toBe('#FFFFFF')
+    expect(COLORS.text).toBe('#450A0A')
+    expect(COLORS.textSecondary).toBe('#7F1D1D')
+    expect(COLORS.textMuted).toBe('#9CA3AF')
+    expect(COLORS.border).toBe('#FECACA')
   })
 })

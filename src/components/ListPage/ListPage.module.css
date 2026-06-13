@@ -2,7 +2,7 @@
   width: 100%;
   min-height: 100vh;
   padding: 0 16px 80px;
-  background: var(--color-bg);
+  background: var(--bg);
 }
 
 .header {
@@ -11,8 +11,8 @@
 
 .title {
   font-size: 24px;
-  font-weight: 900;
-  color: var(--color-text);
+  font-weight: 700;
+  color: var(--text);
   margin-bottom: 12px;
 }
 
@@ -25,7 +25,7 @@
   left: 14px;
   top: 50%;
   transform: translateY(-50%);
-  color: var(--color-text-muted);
+  color: var(--text-3);
   pointer-events: none;
 }
 
@@ -33,22 +33,22 @@
   width: 100%;
   padding: 10px 16px 10px 40px;
   border-radius: var(--radius-lg);
-  border: 1px solid var(--color-border-light);
-  background: var(--color-card);
-  color: var(--color-text);
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--text);
   font-size: 14px;
-  font-family: var(--font-body);
+  font-family: var(--font);
   outline: none;
   transition: border-color 0.2s;
 }
 
 .searchInput::placeholder {
-  color: var(--color-text-muted);
+  color: var(--text-3);
 }
 
 .searchInput:focus {
-  border-color: var(--color-primary);
-  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.08);
+  border-color: var(--blue);
+  box-shadow: 0 0 0 3px rgba(59, 127, 255, 0.08);
 }
 
 .filters {
@@ -58,20 +58,20 @@
 .districtSelect {
   width: 100%;
   padding: 8px 12px;
-  border-radius: var(--radius-md);
-  border: 1px solid var(--color-border-light);
-  background: var(--color-card);
-  color: var(--color-text);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--text);
   font-size: 14px;
-  font-family: var(--font-body);
+  font-family: var(--font);
   outline: none;
   appearance: none;
   cursor: pointer;
 }
 
 .districtSelect option {
-  background: var(--color-card);
-  color: var(--color-text);
+  background: var(--card);
+  color: var(--text);
 }
 
 .list {
@@ -84,12 +84,12 @@
 .empty {
   text-align: center;
   padding: 48px 0;
-  color: var(--color-text-muted);
+  color: var(--text-3);
   font-size: 14px;
 }
 
 .emptyHint {
   font-size: 12px;
   margin-top: 6px;
-  color: var(--color-text-muted);
+  color: var(--text-3);
 }

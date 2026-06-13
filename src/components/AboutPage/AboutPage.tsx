@@ -1,4 +1,4 @@
-import { Heart, Github, MapPin } from 'lucide-react'
+import { Heart, MapPin } from 'lucide-react'
 import styles from './AboutPage.module.css'
 
 export function AboutPage() {
@@ -6,7 +6,7 @@ export function AboutPage() {
     <div className={styles.container}>
       <div className={styles.hero}>
         <div className={styles.iconWrap}>
-          <MapPin size={32} color="#DC2626" />
+          <MapPin size={32} color="#3B7FFF" />
         </div>
         <h1 className={styles.title}>重庆本地人才知道的吃的</h1>
         <p className={styles.subtitle}>藏在巷子里的真味道</p>
@@ -37,7 +37,7 @@ export function AboutPage() {
       </div>
 
       <div className={styles.footer}>
-        <Heart size={14} style={{ verticalAlign: -2, marginRight: 4, color: '#DC2626' }} />
+        <Heart size={14} style={{ verticalAlign: -2, marginRight: 4, color: '#E84D39' }} />
         Made in 重庆
       </div>
     </div>

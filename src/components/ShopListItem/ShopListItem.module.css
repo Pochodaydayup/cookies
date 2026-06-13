@@ -4,9 +4,9 @@
   flex-direction: column;
   gap: 6px;
   padding: 14px 16px;
-  background: var(--color-card);
-  border: 1px solid var(--color-border-light);
-  border-radius: var(--radius-md);
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
   cursor: pointer;
   text-align: left;
   transition: all 0.2s;
@@ -14,8 +14,8 @@
 }
 
 .item:active {
-  background: var(--color-primary-light);
-  border-color: var(--color-border);
+  background: var(--blue-light);
+  border-color: var(--blue);
 }
 
 .header {
@@ -27,12 +27,12 @@
 .name {
   font-size: 16px;
   font-weight: 700;
-  color: var(--color-text);
+  color: var(--text);
 }
 
 .price {
   font-size: 13px;
-  color: var(--color-cta);
+  color: var(--red);
   font-weight: 700;
 }
 
@@ -44,23 +44,23 @@
 
 .categoryTag {
   padding: 2px 8px;
-  border-radius: var(--radius-sm);
-  background: var(--color-primary-light);
-  color: var(--color-primary);
+  border-radius: var(--radius);
+  background: var(--blue-light);
+  color: var(--blue);
   font-size: 11px;
   font-weight: 600;
 }
 
 .district {
   font-size: 12px;
-  color: var(--color-text-muted);
+  color: var(--text-3);
   display: flex;
   align-items: center;
 }
 
 .description {
   font-size: 13px;
-  color: var(--color-text-secondary);
+  color: var(--text-2);
   line-height: 1.4;
   overflow: hidden;
   text-overflow: ellipsis;

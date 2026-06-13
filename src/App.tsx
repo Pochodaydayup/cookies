@@ -15,19 +15,27 @@ function App() {
 
   return (
     <div className="app-container">
-      <main className="app-content">
-        {activeTab === 'map' && (
-          <MapPage shops={shops} loading={loading} error={error} />
-        )}
-        {activeTab === 'list' && (
+      {/* Map is always mounted — hidden with visibility to preserve Leaflet dimensions */}
+      <div className={activeTab === 'map' ? 'map-visible' : 'map-hidden'}>
+        <MapPage shops={shops} loading={loading} error={error} />
+      </div>
+
+      {activeTab === 'list' && (
+        <div className="app-content">
           <ListPage shops={shops} onShopClick={setSelectedShop} />
-        )}
-        {activeTab === 'about' && <AboutPage />}
-      </main>
-      <TabBar activeTab={activeTab} onTabChange={setActiveTab} />
-      {activeTab === 'list' && selectedShop && (
-        <ShopCard shop={selectedShop} onClose={() => setSelectedShop(null)} />
+          {selectedShop && (
+            <ShopCard shop={selectedShop} onClose={() => setSelectedShop(null)} />
+          )}
+        </div>
       )}
+
+      {activeTab === 'about' && (
+        <div className="app-content">
+          <AboutPage />
+        </div>
+      )}
+
+      <TabBar activeTab={activeTab} onTabChange={setActiveTab} />
     </div>
   )
 }

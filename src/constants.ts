@@ -35,13 +35,16 @@ export const DISTRICT_CENTERS: Record<DistrictKey, { lng: number; lat: number }>
 }
 
 export const COLORS = {
-  primary: '#DC2626',
-  primaryLight: '#FEF2F2',
-  cta: '#CA8A04',
-  bg: '#FFFBFB',
+  blue: '#3B7FFF',
+  blueLight: '#EBF1FF',
+  blueDark: '#2B5FD9',
+  red: '#E84D39',
+  orange: '#FF8C1A',
+  green: '#34B369',
+  bg: '#F5F6FA',
   card: '#FFFFFF',
-  text: '#450A0A',
-  textSecondary: '#7F1D1D',
-  textMuted: '#9CA3AF',
-  border: '#FECACA',
+  text: '#1A1B2E',
+  text2: '#6B7085',
+  text3: '#A0A4B8',
+  border: '#ECEEF4',
 } as const

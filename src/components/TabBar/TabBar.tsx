@@ -22,7 +22,7 @@ export function TabBar({ activeTab, onTabChange }: TabBarProps) {
           className={`${styles.tab} ${activeTab === key ? styles.active : ''}`}
           onClick={() => onTabChange(key)}
         >
-          <Icon size={20} strokeWidth={activeTab === key ? 2.5 : 1.8} />
+          <Icon size={18} strokeWidth={activeTab === key ? 2.2 : 1.6} />
           <span className={styles.label}>{label}</span>
         </button>
       ))}

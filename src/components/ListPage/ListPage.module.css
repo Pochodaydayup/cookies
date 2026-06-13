@@ -13,8 +13,8 @@
   width: 100%;
   padding: 10px 16px;
   border-radius: 24px;
-  border: 1px solid rgba(0, 240, 255, 0.2);
-  background: rgba(20, 20, 40, 0.6);
+  border: 1px solid var(--color-border);
+  background: #ffffff;
   color: var(--color-text-primary);
   font-size: 14px;
   outline: none;
@@ -26,8 +26,7 @@
 }
 
 .searchInput:focus {
-  border-color: var(--color-neon-cyan);
-  box-shadow: 0 0 8px rgba(0, 240, 255, 0.15);
+  border-color: var(--color-primary);
 }
 
 .filters {
@@ -38,8 +37,8 @@
   width: 100%;
   padding: 8px 12px;
   border-radius: 12px;
-  border: 1px solid rgba(0, 240, 255, 0.2);
-  background: rgba(20, 20, 40, 0.6);
+  border: 1px solid var(--color-border);
+  background: #ffffff;
   color: var(--color-text-primary);
   font-size: 14px;
   outline: none;
@@ -48,7 +47,7 @@
 }
 
 .districtSelect option {
-  background: #14142a;
+  background: #ffffff;
   color: var(--color-text-primary);
 }
 

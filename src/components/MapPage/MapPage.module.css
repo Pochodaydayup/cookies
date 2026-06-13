@@ -7,7 +7,7 @@
 }
 
 .loadingText {
-  color: var(--color-neon-cyan);
+  color: var(--color-primary);
   font-size: 16px;
   animation: loadPulse 1.2s ease-in-out infinite;
 }

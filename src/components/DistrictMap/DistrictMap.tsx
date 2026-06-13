@@ -15,19 +15,19 @@ interface DistrictMapProps {
   onBack: () => void
 }
 
-function createNeonIcon() {
+function createRedIcon() {
   return L.divIcon({
     className: '',
     html: `<div style="
-      width: 14px;
-      height: 14px;
+      width: 16px;
+      height: 16px;
       border-radius: 50%;
-      background: #ff2d78;
-      box-shadow: 0 0 8px #ff2d78, 0 0 16px rgba(255,45,120,0.3);
-      animation: markerPulse 1.5s ease-in-out infinite;
+      background: #d42027;
+      border: 2px solid #fff;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
     "></div>`,
-    iconSize: [14, 14],
-    iconAnchor: [7, 7],
+    iconSize: [16, 16],
+    iconAnchor: [8, 8],
   })
 }
 
@@ -43,7 +43,6 @@ export function DistrictMap({
   const markersRef = useRef<L.Marker[]>([])
   const [selectedShop, setSelectedShop] = useState<Shop | null>(null)
 
-  // Initialize map
   useEffect(() => {
     if (!mapContainerRef.current) return
 
@@ -52,9 +51,8 @@ export function DistrictMap({
       zoomControl: false,
     }).setView([center.lat, center.lng], 14)
 
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/">CARTO</a>',
-      subdomains: 'abcd',
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
       maxZoom: 19,
     }).addTo(map)
 
@@ -62,7 +60,6 @@ export function DistrictMap({
 
     mapRef.current = map
 
-    // Force a size recalculation after mount
     setTimeout(() => map.invalidateSize(), 100)
 
     return () => {
@@ -71,7 +68,6 @@ export function DistrictMap({
     }
   }, [district])
 
-  // Update markers
   useEffect(() => {
     const map = mapRef.current
     if (!map) return
@@ -83,7 +79,7 @@ export function DistrictMap({
       ? shops.filter((s) => s.category === activeCategory)
       : shops
 
-    const icon = createNeonIcon()
+    const icon = createRedIcon()
 
     filtered.forEach((shop) => {
       const marker = L.marker([shop.location.lat, shop.location.lng], { icon })

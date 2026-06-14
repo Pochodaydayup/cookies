@@ -1,5 +1,4 @@
-// Cloudflare Worker: serves static assets + Decap CMS OAuth
-// Strategy: store token in localStorage on callback, CMS page picks it up
+// Cloudflare Worker: serves static assets + Decap CMS OAuth (redirect flow)
 
 import { GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET } from './src/env'
 
@@ -7,62 +6,22 @@ interface Env {
   ASSETS: { fetch: (req: Request) => Promise<Response> }
 }
 
-function popupPage(clientId: string, redirectUri: string, scope: string): string {
-  return `<!DOCTYPE html>
-<html><head><style>
-  body { font-family: -apple-system, sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; color: #1A1B2E; background: #F5F6FA; }
-  a { color: #3B7FFF; }
-</style></head>
-<body>
-<p>正在跳转到 GitHub 登录...</p>
-<p><a id="link" href="#">如果没有自动跳转，点击这里</a></p>
-<script>
-  var authUrl = 'https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&scope=${scope}';
-  document.getElementById('link').href = authUrl;
-  window.location.href = authUrl;
-</script>
-</body></html>`;
-}
-
-function callbackPage(token: string): string {
-  return `<!DOCTYPE html>
-<html><head><style>
-  body { font-family: -apple-system, sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; color: #1A1B2E; background: #F5F6FA; }
-  .success { color: #34B369; font-size: 24px; margin-bottom: 8px; }
-</style></head>
-<body>
-<div style="text-align:center">
-  <div class="success">&#10003; 登录成功</div>
-  <p>正在返回管理页面...</p>
-</div>
-<script>
-  // Store token in localStorage so the CMS main page can pick it up
-  localStorage.setItem('decap-cms-token', '${token}');
-
-  // Also try postMessage as a backup
-  var data = JSON.stringify({ token: '${token}', provider: 'github' });
-  var msg = 'authorization:github:success:' + data;
-  try { window.opener && window.opener.postMessage(msg, '*'); } catch(e) {}
-
-  // Close this popup after a short delay
-  setTimeout(function() { window.close(); }, 500);
-</script>
-</body></html>`;
-}
-
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {
     const url = new URL(request.url)
 
+    // Start OAuth: redirect to GitHub
+    if (url.pathname === '/api/auth/login') {
+      const redirectUri = `${url.origin}/api/auth/callback`
+      const githubAuthUrl = `https://github.com/login/oauth/authorize?client_id=${GITHUB_CLIENT_ID}&redirect_uri=${encodeURIComponent(redirectUri)}&scope=repo`
+      return Response.redirect(githubAuthUrl, 302)
+    }
+
+    // OAuth callback: exchange code for token, then redirect to admin with token
     if (url.pathname === '/api/auth/callback') {
       const code = url.searchParams.get('code')
-
       if (!code) {
-        const scope = url.searchParams.get('scope') || 'repo'
-        const redirectUri = `${url.origin}/api/auth/callback`
-        return new Response(popupPage(GITHUB_CLIENT_ID, redirectUri, scope), {
-          headers: { 'Content-Type': 'text/html; charset=utf-8' },
-        })
+        return new Response('Missing code', { status: 400 })
       }
 
       const tokenResponse = await fetch('https://github.com/login/oauth/access_token', {
@@ -84,7 +43,14 @@ export default {
         return new Response(`OAuth error: ${tokenData.error_description}`, { status: 400 })
       }
 
-      return new Response(callbackPage(tokenData.access_token!), {
+      // Redirect back to admin page with token in sessionStorage via a small HTML page
+      return new Response(`<!DOCTYPE html>
+<html><body>
+<script>
+  sessionStorage.setItem('github_token', '${tokenData.access_token}');
+  window.location.href = '/admin/';
+</script>
+</body></html>`, {
         headers: { 'Content-Type': 'text/html; charset=utf-8' },
       })
     }

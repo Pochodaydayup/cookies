@@ -1,5 +1,9 @@
 backend:
-  name: git-gateway
+  name: github
+  repo: Pochodaydayup/cookies
+  branch: main
+  base_url: https://cookies.pages.dev
+  auth_endpoint: /api/auth
 
 media_folder: public/images
 public_folder: /images

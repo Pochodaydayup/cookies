@@ -30,7 +30,7 @@
           format: 'json',
           slug: '{{id}}',
           fields: [
-            { label: '店铺ID', name: 'id', widget: 'string' },
+            { label: '店铺ID', name: 'id', widget: 'string', default: '' },
             { label: '店名', name: 'name', widget: 'string' },
             { label: '分类', name: 'category', widget: 'select', options: [
               { label: '火锅', value: 'hotpot' },
@@ -63,6 +63,18 @@
         }]
       }
     });
+
+    // Auto-fill the ID field when creating a new entry
+    var autofillInterval = setInterval(function() {
+      var idInput = document.querySelector('input[id$="-id"]');
+      if (idInput && !idInput.value) {
+        idInput.value = Date.now().toString(36) + Math.random().toString(36).substring(2, 6);
+        idInput.dispatchEvent(new Event('change', { bubbles: true }));
+        idInput.dispatchEvent(new Event('input', { bubbles: true }));
+        idInput.readOnly = true;
+        idInput.style.background = '#f5f6fa';
+      }
+    }, 1000);
 
     // Replace the default login button with our redirect OAuth link
     var overrideInterval = setInterval(function() {

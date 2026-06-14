@@ -13,8 +13,18 @@ export default {
   async fetch(request: Request, env: Env): Promise<Response> {
     const url = new URL(request.url)
 
-    // OAuth callback for Decap CMS
     if (url.pathname === '/api/auth/callback') {
+      // Step 1: CMS sends POST with provider/scope → redirect to GitHub OAuth
+      if (request.method === 'POST') {
+        const redirectUri = `${url.origin}/api/auth/callback`
+        const githubAuthUrl = `https://github.com/login/oauth/authorize?client_id=${env.GITHUB_CLIENT_ID}&redirect_uri=${encodeURIComponent(redirectUri)}&scope=repo`
+        return new Response(null, {
+          status: 302,
+          headers: { Location: githubAuthUrl },
+        })
+      }
+
+      // Step 2: GitHub callback with code → exchange for token
       const code = url.searchParams.get('code')
       if (!code) {
         return new Response('Missing code parameter', { status: 400 })

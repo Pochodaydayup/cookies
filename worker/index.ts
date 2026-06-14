@@ -14,13 +14,12 @@ export default {
     const url = new URL(request.url)
 
     if (url.pathname === '/api/auth/callback') {
-      // Step 1: CMS sends POST with provider/scope → redirect to GitHub OAuth
+      // Step 1: CMS sends POST → return GitHub OAuth URL as JSON
       if (request.method === 'POST') {
         const redirectUri = `${url.origin}/api/auth/callback`
         const githubAuthUrl = `https://github.com/login/oauth/authorize?client_id=${env.GITHUB_CLIENT_ID}&redirect_uri=${encodeURIComponent(redirectUri)}&scope=repo`
-        return new Response(null, {
-          status: 302,
-          headers: { Location: githubAuthUrl },
+        return new Response(JSON.stringify({ url: githubAuthUrl }), {
+          headers: { 'Content-Type': 'application/json' },
         })
       }
 

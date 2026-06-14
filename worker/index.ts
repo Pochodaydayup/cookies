@@ -17,13 +17,14 @@ export default {
       return Response.redirect(githubAuthUrl, 302)
     }
 
-    // OAuth callback: exchange code for token, then redirect to admin with token
+    // OAuth callback: exchange code for token, get user info, redirect to admin
     if (url.pathname === '/api/auth/callback') {
       const code = url.searchParams.get('code')
       if (!code) {
         return new Response('Missing code', { status: 400 })
       }
 
+      // Exchange code for access token
       const tokenResponse = await fetch('https://github.com/login/oauth/access_token', {
         method: 'POST',
         headers: {
@@ -43,11 +44,26 @@ export default {
         return new Response(`OAuth error: ${tokenData.error_description}`, { status: 400 })
       }
 
-      // Redirect back to admin page with token in sessionStorage via a small HTML page
+      const token = tokenData.access_token!
+
+      // Get GitHub user info
+      const userResponse = await fetch('https://api.github.com/user', {
+        headers: {
+          Authorization: `token ${token}`,
+          'User-Agent': 'cookies-cms',
+        },
+      })
+      const userData = await userResponse.json() as { login?: string; name?: string }
+      const login = userData.login || ''
+
+      // Return HTML that stores token and redirects to admin
       return new Response(`<!DOCTYPE html>
 <html><body>
 <script>
-  sessionStorage.setItem('github_token', '${tokenData.access_token}');
+  localStorage.setItem('decap-cms-user', JSON.stringify({
+    token: '${token}',
+    login: '${login}'
+  }));
   window.location.href = '/admin/';
 </script>
 </body></html>`, {

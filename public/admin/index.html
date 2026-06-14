@@ -8,18 +8,6 @@
 </head>
 <body>
   <script>
-    // Check if returning from OAuth with token in sessionStorage
-    var oauthToken = sessionStorage.getItem('github_token');
-    if (oauthToken) {
-      sessionStorage.removeItem('github_token');
-      // Store token so Decap CMS picks it up as an existing login
-      localStorage.setItem('decap-cms-user', JSON.stringify({
-        token: oauthToken,
-        login: ''
-      }));
-    }
-  </script>
-  <script>
     window.CMS_MANUAL_INIT = true;
   </script>
   <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
@@ -76,13 +64,11 @@
       }
     });
 
-    // Override the default login button to use our redirect OAuth instead of popup
-    // Wait for CMS to render the login page, then replace the login button behavior
+    // Replace the default login button with our redirect OAuth link
     var overrideInterval = setInterval(function() {
       var loginBtn = document.querySelector('button');
       if (loginBtn && loginBtn.textContent.indexOf('GitHub') !== -1) {
         clearInterval(overrideInterval);
-        // Replace with a link to our redirect OAuth
         var a = document.createElement('a');
         a.href = '/api/auth/login';
         a.textContent = loginBtn.textContent;

@@ -1,5 +1,6 @@
 name = "cookies"
 compatibility_date = "2024-01-01"
+main = "worker/index.ts"
 
 [assets]
 directory = "./dist"

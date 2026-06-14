@@ -8,20 +8,16 @@
 </head>
 <body>
   <script>
-    // Dynamically set auth_endpoint based on current domain
     window.CMS_MANUAL_INIT = true;
   </script>
   <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
   <script>
-    const baseUrl = window.location.origin;
     CMS.init({
       config: {
         backend: {
           name: 'github',
           repo: 'Pochodaydayup/cookies',
-          branch: 'main',
-          base_url: baseUrl,
-          auth_endpoint: '/api/auth/callback'
+          branch: 'main'
         },
         media_folder: 'public/images',
         public_folder: '/images',

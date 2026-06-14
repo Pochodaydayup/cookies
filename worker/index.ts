@@ -1,5 +1,4 @@
 // Cloudflare Worker: serves static assets + Decap CMS OAuth
-// GitHub credentials are injected at build time via worker/src/env.ts
 
 import { GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET } from './src/env'
 
@@ -12,6 +11,7 @@ function popupPage(clientId: string, redirectUri: string, scope: string): string
 <html><body>
 <p style="font-family:sans-serif;text-align:center;padding-top:40px;">正在跳转到 GitHub 登录...</p>
 <script>
+  // Handle handshake from parent (Decap CMS)
   window.addEventListener('message', function(e) {
     if (e.data === 'authorizing:github') {
       e.source.postMessage('authorizing:github', e.origin);
@@ -23,31 +23,31 @@ function popupPage(clientId: string, redirectUri: string, scope: string): string
 </body></html>`;
 }
 
-function callbackPage(token: string): string {
+function callbackPage(token: string, baseUrl: string): string {
   return `<!DOCTYPE html>
 <html><body>
 <p style="font-family:sans-serif;text-align:center;padding-top:40px;">登录成功，正在返回...</p>
 <script>
-  var data = JSON.stringify({ token: '${token}', provider: 'github' });
+  var token = '${token}';
+  var data = JSON.stringify({ token: token, provider: 'github' });
   var msg = 'authorization:github:success:' + data;
 
-  function sendToken() {
+  // The parent's authorizeCallback checks e.origin === base_url.
+  // postMessage with specific targetOrigin to match what Decap CMS expects.
+  var targetOrigin = '${baseUrl}';
+
+  function trySend() {
     if (window.opener) {
-      window.opener.postMessage(msg, '*');
+      window.opener.postMessage(msg, targetOrigin);
     }
   }
 
-  window.addEventListener('message', function(e) {
-    if (e.data === 'authorizing:github') {
-      e.source.postMessage('authorizing:github', e.origin);
-      setTimeout(function() {
-        sendToken();
-        setTimeout(function() { window.close(); }, 300);
-      }, 100);
-    }
-  });
-
-  setTimeout(sendToken, 300);
+  trySend();
+  setTimeout(trySend, 200);
+  setTimeout(trySend, 500);
+  setTimeout(trySend, 1000);
+  setTimeout(trySend, 2000);
+  setTimeout(function() { window.close(); }, 3000);
 </script>
 </body></html>`;
 }
@@ -86,7 +86,7 @@ export default {
         return new Response(`OAuth error: ${tokenData.error_description}`, { status: 400 })
       }
 
-      return new Response(callbackPage(tokenData.access_token!), {
+      return new Response(callbackPage(tokenData.access_token!, url.origin), {
         headers: { 'Content-Type': 'text/html; charset=utf-8' },
       })
     }

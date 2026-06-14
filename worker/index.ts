@@ -8,16 +8,19 @@ interface Env {
 
 function popupPage(clientId: string, redirectUri: string, scope: string): string {
   return `<!DOCTYPE html>
-<html><body>
-<p style="font-family:sans-serif;text-align:center;padding-top:40px;">正在跳转到 GitHub 登录...</p>
+<html><head><style>
+  body { font-family: -apple-system, sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; color: #1A1B2E; }
+  .container { text-align: center; }
+  a { color: #3B7FFF; }
+</style></head>
+<body>
+<div class="container">
+  <p>正在跳转到 GitHub 登录...</p>
+  <p>如果没有自动跳转，<a id="link" href="#">点击这里</a></p>
+</div>
 <script>
-  // Handle handshake from parent (Decap CMS)
-  window.addEventListener('message', function(e) {
-    if (e.data === 'authorizing:github') {
-      e.source.postMessage('authorizing:github', e.origin);
-    }
-  });
   var authUrl = 'https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&scope=${scope}';
+  document.getElementById('link').href = authUrl;
   window.location.href = authUrl;
 </script>
 </body></html>`;
@@ -25,29 +28,44 @@ function popupPage(clientId: string, redirectUri: string, scope: string): string
 
 function callbackPage(token: string, baseUrl: string): string {
   return `<!DOCTYPE html>
-<html><body>
-<p style="font-family:sans-serif;text-align:center;padding-top:40px;">登录成功，正在返回...</p>
+<html><head><style>
+  body { font-family: -apple-system, sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; color: #1A1B2E; }
+  .container { text-align: center; }
+  .success { color: #34B369; font-size: 18px; margin-bottom: 8px; }
+</style></head>
+<body>
+<div class="container">
+  <div class="success">&#10003; 登录成功</div>
+  <p>正在返回管理页面...</p>
+</div>
 <script>
   var token = '${token}';
   var data = JSON.stringify({ token: token, provider: 'github' });
   var msg = 'authorization:github:success:' + data;
-
-  // The parent's authorizeCallback checks e.origin === base_url.
-  // postMessage with specific targetOrigin to match what Decap CMS expects.
   var targetOrigin = '${baseUrl}';
 
+  // The popup navigated through GitHub and back, so window.opener might be null
+  // due to cross-origin navigation. Try postMessage with specific origin.
   function trySend() {
-    if (window.opener) {
-      window.opener.postMessage(msg, targetOrigin);
-    }
+    try {
+      if (window.opener && !window.opener.closed) {
+        window.opener.postMessage(msg, targetOrigin);
+        return true;
+      }
+    } catch(e) {}
+    return false;
   }
 
-  trySend();
-  setTimeout(trySend, 200);
-  setTimeout(trySend, 500);
-  setTimeout(trySend, 1000);
-  setTimeout(trySend, 2000);
-  setTimeout(function() { window.close(); }, 3000);
+  // Try multiple times
+  if (!trySend()) {
+    setTimeout(function() { trySend(); }, 100);
+    setTimeout(function() { trySend(); }, 300);
+    setTimeout(function() { trySend(); }, 600);
+    setTimeout(function() { trySend(); }, 1000);
+    setTimeout(function() { trySend(); }, 2000);
+  }
+
+  setTimeout(function() { window.close(); }, 4000);
 </script>
 </body></html>`;
 }

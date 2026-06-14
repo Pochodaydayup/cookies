@@ -1,4 +1,5 @@
 // Cloudflare Worker: serves static assets + Decap CMS OAuth
+// Strategy: store token in localStorage on callback, CMS page picks it up
 
 import { GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET } from './src/env'
 
@@ -9,15 +10,12 @@ interface Env {
 function popupPage(clientId: string, redirectUri: string, scope: string): string {
   return `<!DOCTYPE html>
 <html><head><style>
-  body { font-family: -apple-system, sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; color: #1A1B2E; }
-  .container { text-align: center; }
+  body { font-family: -apple-system, sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; color: #1A1B2E; background: #F5F6FA; }
   a { color: #3B7FFF; }
 </style></head>
 <body>
-<div class="container">
-  <p>正在跳转到 GitHub 登录...</p>
-  <p>如果没有自动跳转，<a id="link" href="#">点击这里</a></p>
-</div>
+<p>正在跳转到 GitHub 登录...</p>
+<p><a id="link" href="#">如果没有自动跳转，点击这里</a></p>
 <script>
   var authUrl = 'https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&scope=${scope}';
   document.getElementById('link').href = authUrl;
@@ -26,46 +24,28 @@ function popupPage(clientId: string, redirectUri: string, scope: string): string
 </body></html>`;
 }
 
-function callbackPage(token: string, baseUrl: string): string {
+function callbackPage(token: string): string {
   return `<!DOCTYPE html>
 <html><head><style>
-  body { font-family: -apple-system, sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; color: #1A1B2E; }
-  .container { text-align: center; }
-  .success { color: #34B369; font-size: 18px; margin-bottom: 8px; }
+  body { font-family: -apple-system, sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; color: #1A1B2E; background: #F5F6FA; }
+  .success { color: #34B369; font-size: 24px; margin-bottom: 8px; }
 </style></head>
 <body>
-<div class="container">
+<div style="text-align:center">
   <div class="success">&#10003; 登录成功</div>
   <p>正在返回管理页面...</p>
 </div>
 <script>
-  var token = '${token}';
-  var data = JSON.stringify({ token: token, provider: 'github' });
+  // Store token in localStorage so the CMS main page can pick it up
+  localStorage.setItem('decap-cms-token', '${token}');
+
+  // Also try postMessage as a backup
+  var data = JSON.stringify({ token: '${token}', provider: 'github' });
   var msg = 'authorization:github:success:' + data;
-  var targetOrigin = '${baseUrl}';
+  try { window.opener && window.opener.postMessage(msg, '*'); } catch(e) {}
 
-  // The popup navigated through GitHub and back, so window.opener might be null
-  // due to cross-origin navigation. Try postMessage with specific origin.
-  function trySend() {
-    try {
-      if (window.opener && !window.opener.closed) {
-        window.opener.postMessage(msg, targetOrigin);
-        return true;
-      }
-    } catch(e) {}
-    return false;
-  }
-
-  // Try multiple times
-  if (!trySend()) {
-    setTimeout(function() { trySend(); }, 100);
-    setTimeout(function() { trySend(); }, 300);
-    setTimeout(function() { trySend(); }, 600);
-    setTimeout(function() { trySend(); }, 1000);
-    setTimeout(function() { trySend(); }, 2000);
-  }
-
-  setTimeout(function() { window.close(); }, 4000);
+  // Close this popup after a short delay
+  setTimeout(function() { window.close(); }, 500);
 </script>
 </body></html>`;
 }
@@ -104,7 +84,7 @@ export default {
         return new Response(`OAuth error: ${tokenData.error_description}`, { status: 400 })
       }
 
-      return new Response(callbackPage(tokenData.access_token!, url.origin), {
+      return new Response(callbackPage(tokenData.access_token!), {
         headers: { 'Content-Type': 'text/html; charset=utf-8' },
       })
     }

@@ -12,6 +12,21 @@
   </script>
   <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
   <script>
+    // Poll localStorage for OAuth token from the popup callback
+    // The popup can't use postMessage after cross-origin redirect (GitHub OAuth),
+    // so it stores the token in localStorage instead.
+    var tokenCheckInterval = setInterval(function() {
+      var storedToken = localStorage.getItem('decap-cms-token');
+      if (storedToken) {
+        localStorage.removeItem('decap-cms-token');
+        clearInterval(tokenCheckInterval);
+        // Dispatch login through the CMS backend
+        if (window.CMS && window.CMS.backend) {
+          window.CMS.backend.github.authenticate({ token: storedToken });
+        }
+      }
+    }, 300);
+
     CMS.init({
       config: {
         backend: {

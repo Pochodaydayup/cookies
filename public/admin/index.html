@@ -5,109 +5,91 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="robots" content="noindex" />
   <title>重庆美食地图 - 内容管理</title>
-  <style>
-    body { font-family: -apple-system, sans-serif; margin: 0; background: #F5F6FA; display: flex; align-items: center; justify-content: center; height: 100vh; color: #1A1B2E; }
-    .login-box { text-align: center; padding: 40px; background: #fff; border-radius: 14px; box-shadow: 0 2px 12px rgba(26,27,46,0.08); }
-    .login-box h1 { font-size: 20px; margin: 0 0 8px; }
-    .login-box p { color: #6B7085; margin: 0 0 24px; font-size: 14px; }
-    .login-btn { display: inline-block; padding: 12px 32px; background: #1A1B2E; color: #fff; border: none; border-radius: 10px; font-size: 15px; font-weight: 600; cursor: pointer; text-decoration: none; }
-    .login-btn:hover { background: #3B7FFF; }
-    .error { color: #E84D39; margin-top: 16px; font-size: 13px; }
-  </style>
 </head>
 <body>
-  <div class="login-box" id="loginBox">
-    <h1>重庆美食地图</h1>
-    <p>内容管理系统</p>
-    <a class="login-btn" id="loginBtn" href="/api/auth/login">登录 GitHub</a>
-    <div class="error" id="error" style="display:none"></div>
-  </div>
-
   <script>
-    // Check if we're returning from OAuth with a stored token
-    var storedToken = sessionStorage.getItem('github_token');
-    if (storedToken) {
+    // Check if returning from OAuth with token in sessionStorage
+    var oauthToken = sessionStorage.getItem('github_token');
+    if (oauthToken) {
       sessionStorage.removeItem('github_token');
-      document.getElementById('loginBox').innerHTML = '<h1>登录中...</h1><p>正在加载 CMS...</p>';
-
-      var script = document.createElement('script');
-      script.src = 'https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js';
-      script.onload = function() {
-        // Wait for CMS to be ready
-        var waitCMS = setInterval(function() {
-          if (window.CMS) {
-            clearInterval(waitCMS);
-            CMS.init({
-              config: {
-                backend: {
-                  name: 'github',
-                  repo: 'Pochodaydayup/cookies',
-                  branch: 'main'
-                },
-                media_folder: 'public/images',
-                public_folder: '/images',
-                collections: [{
-                  name: 'shops',
-                  label: '店铺',
-                  folder: 'public/data',
-                  create: true,
-                  extension: 'json',
-                  format: 'json',
-                  slug: '{{id}}',
-                  fields: [
-                    { label: '店铺ID', name: 'id', widget: 'string' },
-                    { label: '店名', name: 'name', widget: 'string' },
-                    { label: '分类', name: 'category', widget: 'select', options: [
-                      { label: '火锅', value: 'hotpot' },
-                      { label: '小面', value: 'noodles' },
-                      { label: '串串', value: 'chuanchuan' },
-                      { label: '烧烤', value: 'bbq' },
-                      { label: '江湖菜', value: 'jianghu' },
-                      { label: '甜品/冰粉', value: 'dessert' },
-                      { label: '其他', value: 'other' }
-                    ]},
-                    { label: '区域', name: 'district', widget: 'select', options: [
-                      { label: '渝中区', value: 'yuzhong' },
-                      { label: '江北区', value: 'jiangbei' },
-                      { label: '南岸区', value: 'nanan' },
-                      { label: '沙坪坝区', value: 'shapinba' },
-                      { label: '九龙坡区', value: 'jiulongpo' },
-                      { label: '大渡口区', value: 'dadukou' },
-                      { label: '巴南区', value: 'banan' },
-                      { label: '渝北区', value: 'yubei' },
-                      { label: '北碚区', value: 'beibei' }
-                    ]},
-                    { label: '地址', name: 'address', widget: 'string' },
-                    { label: '一句话描述', name: 'description', widget: 'string' },
-                    { label: '人均消费', name: 'avgPrice', widget: 'number', value_type: 'int' },
-                    { label: '推荐菜品', name: 'recommendDishes', widget: 'list' },
-                    { label: '营业时间', name: 'businessHours', widget: 'string' },
-                    { label: '经度', name: 'location.lng', widget: 'number', value_type: 'float' },
-                    { label: '纬度', name: 'location.lat', widget: 'number', value_type: 'float' }
-                  ]
-                }]
-              }
-            });
-
-            // After init, force login with the stored token
-            var tryLogin = setInterval(function() {
-              if (window.CMS && window.CMS.backend && window.CMS.backend.github) {
-                clearInterval(tryLogin);
-                // Store token in the way Decap CMS github backend expects
-                try {
-                  localStorage.setItem('decap-cms-user', JSON.stringify({ token: storedToken, login: '' }));
-                  // Trigger a page reload so CMS picks up the stored user
-                  window.location.reload();
-                } catch(e) {
-                  console.error('Login failed:', e);
-                }
-              }
-            }, 200);
-          }
-        }, 100);
-      };
-      document.head.appendChild(script);
+      // Store token so Decap CMS picks it up as an existing login
+      localStorage.setItem('decap-cms-user', JSON.stringify({
+        token: oauthToken,
+        login: ''
+      }));
     }
+  </script>
+  <script>
+    window.CMS_MANUAL_INIT = true;
+  </script>
+  <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+  <script>
+    CMS.init({
+      config: {
+        backend: {
+          name: 'github',
+          repo: 'Pochodaydayup/cookies',
+          branch: 'main'
+        },
+        media_folder: 'public/images',
+        public_folder: '/images',
+        collections: [{
+          name: 'shops',
+          label: '店铺',
+          folder: 'public/data',
+          create: true,
+          extension: 'json',
+          format: 'json',
+          slug: '{{id}}',
+          fields: [
+            { label: '店铺ID', name: 'id', widget: 'string' },
+            { label: '店名', name: 'name', widget: 'string' },
+            { label: '分类', name: 'category', widget: 'select', options: [
+              { label: '火锅', value: 'hotpot' },
+              { label: '小面', value: 'noodles' },
+              { label: '串串', value: 'chuanchuan' },
+              { label: '烧烤', value: 'bbq' },
+              { label: '江湖菜', value: 'jianghu' },
+              { label: '甜品/冰粉', value: 'dessert' },
+              { label: '其他', value: 'other' }
+            ]},
+            { label: '区域', name: 'district', widget: 'select', options: [
+              { label: '渝中区', value: 'yuzhong' },
+              { label: '江北区', value: 'jiangbei' },
+              { label: '南岸区', value: 'nanan' },
+              { label: '沙坪坝区', value: 'shapinba' },
+              { label: '九龙坡区', value: 'jiulongpo' },
+              { label: '大渡口区', value: 'dadukou' },
+              { label: '巴南区', value: 'banan' },
+              { label: '渝北区', value: 'yubei' },
+              { label: '北碚区', value: 'beibei' }
+            ]},
+            { label: '地址', name: 'address', widget: 'string' },
+            { label: '一句话描述', name: 'description', widget: 'string' },
+            { label: '人均消费', name: 'avgPrice', widget: 'number', value_type: 'int' },
+            { label: '推荐菜品', name: 'recommendDishes', widget: 'list' },
+            { label: '营业时间', name: 'businessHours', widget: 'string' },
+            { label: '经度', name: 'location.lng', widget: 'number', value_type: 'float' },
+            { label: '纬度', name: 'location.lat', widget: 'number', value_type: 'float' }
+          ]
+        }]
+      }
+    });
+
+    // Override the default login button to use our redirect OAuth instead of popup
+    // Wait for CMS to render the login page, then replace the login button behavior
+    var overrideInterval = setInterval(function() {
+      var loginBtn = document.querySelector('button');
+      if (loginBtn && loginBtn.textContent.indexOf('GitHub') !== -1) {
+        clearInterval(overrideInterval);
+        // Replace with a link to our redirect OAuth
+        var a = document.createElement('a');
+        a.href = '/api/auth/login';
+        a.textContent = loginBtn.textContent;
+        a.style.cssText = 'display:inline-flex;align-items:center;gap:8px;padding:12px 24px;background:#1A1B2E;color:#fff;border-radius:8px;font-size:15px;font-weight:600;text-decoration:none;cursor:pointer;';
+        loginBtn.parentNode.replaceChild(a, loginBtn);
+      }
+    }, 300);
   </script>
 </body>
 </html>

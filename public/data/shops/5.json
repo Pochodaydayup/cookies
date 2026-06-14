@@ -1,0 +1,18 @@
+{
+  "id": "5",
+  "name": "杨记江湖菜",
+  "category": "jianghu",
+  "district": "shapinba",
+  "address": "沙坪坝区三峡广场后巷",
+  "description": "正宗江湖菜，量大味足",
+  "avgPrice": 70,
+  "recommendDishes": [
+    "辣子鸡",
+    "水煮鱼"
+  ],
+  "businessHours": "11:00-22:00",
+  "location": {
+    "lng": 106.4582,
+    "lat": 29.5411
+  }
+}

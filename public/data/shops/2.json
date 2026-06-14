@@ -1,0 +1,18 @@
+{
+  "id": "2",
+  "name": "胖妹面庄",
+  "category": "noodles",
+  "district": "yuzhong",
+  "address": "渝中区较场口日月光中心旁",
+  "description": "重庆小面的天花板，早上六点就排队",
+  "avgPrice": 15,
+  "recommendDishes": [
+    "豌杂面",
+    "牛肉面"
+  ],
+  "businessHours": "06:00-14:00",
+  "location": {
+    "lng": 106.581,
+    "lat": 29.556
+  }
+}

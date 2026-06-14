@@ -8,9 +8,16 @@
       "address": "渝中区解放碑某巷12号",
       "description": "正宗老火锅，麻辣鲜香，本地人排队也要吃",
       "avgPrice": 85,
-      "recommendDishes": ["毛肚", "鸭肠", "老肉片"],
+      "recommendDishes": [
+        "毛肚",
+        "鸭肠",
+        "老肉片"
+      ],
       "businessHours": "11:00-23:00",
-      "location": { "lng": 106.5789, "lat": 29.5584 }
+      "location": {
+        "lng": 106.5789,
+        "lat": 29.5584
+      }
     },
     {
       "id": "2",
@@ -20,9 +27,15 @@
       "address": "渝中区较场口日月光中心旁",
       "description": "重庆小面的天花板，早上六点就排队",
       "avgPrice": 15,
-      "recommendDishes": ["豌杂面", "牛肉面"],
+      "recommendDishes": [
+        "豌杂面",
+        "牛肉面"
+      ],
       "businessHours": "06:00-14:00",
-      "location": { "lng": 106.5810, "lat": 29.5560 }
+      "location": {
+        "lng": 106.581,
+        "lat": 29.556
+      }
     },
     {
       "id": "3",
@@ -32,9 +45,15 @@
       "address": "江北区观音桥建新东路",
       "description": "串串香老店，味道巴适得很",
       "avgPrice": 60,
-      "recommendDishes": ["牛肉串", "脑花"],
+      "recommendDishes": [
+        "牛肉串",
+        "脑花"
+      ],
       "businessHours": "16:00-02:00",
-      "location": { "lng": 106.5743, "lat": 29.6063 }
+      "location": {
+        "lng": 106.5743,
+        "lat": 29.6063
+      }
     },
     {
       "id": "4",
@@ -44,9 +63,16 @@
       "address": "南岸区南坪步行街",
       "description": "深夜烧烤的灵魂归属",
       "avgPrice": 55,
-      "recommendDishes": ["烤脑花", "烤苕皮", "烤豆干"],
+      "recommendDishes": [
+        "烤脑花",
+        "烤苕皮",
+        "烤豆干"
+      ],
       "businessHours": "18:00-03:00",
-      "location": { "lng": 106.5614, "lat": 29.5234 }
+      "location": {
+        "lng": 106.5614,
+        "lat": 29.5234
+      }
     },
     {
       "id": "5",
@@ -56,9 +82,15 @@
       "address": "沙坪坝区三峡广场后巷",
       "description": "正宗江湖菜，量大味足",
       "avgPrice": 70,
-      "recommendDishes": ["辣子鸡", "水煮鱼"],
+      "recommendDishes": [
+        "辣子鸡",
+        "水煮鱼"
+      ],
       "businessHours": "11:00-22:00",
-      "location": { "lng": 106.4582, "lat": 29.5411 }
+      "location": {
+        "lng": 106.4582,
+        "lat": 29.5411
+      }
     },
     {
       "id": "6",
@@ -68,9 +100,15 @@
       "address": "渝中区十八梯",
       "description": "手工冰粉，夏天必来一碗",
       "avgPrice": 8,
-      "recommendDishes": ["冰粉", "凉糕"],
+      "recommendDishes": [
+        "冰粉",
+        "凉糕"
+      ],
       "businessHours": "09:00-21:00",
-      "location": { "lng": 106.5760, "lat": 29.5540 }
+      "location": {
+        "lng": 106.576,
+        "lat": 29.554
+      }
     }
   ]
 }

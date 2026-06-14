@@ -1,0 +1,18 @@
+{
+  "id": "3",
+  "name": "何王氏串串",
+  "category": "chuanchuan",
+  "district": "jiangbei",
+  "address": "江北区观音桥建新东路",
+  "description": "串串香老店，味道巴适得很",
+  "avgPrice": 60,
+  "recommendDishes": [
+    "牛肉串",
+    "脑花"
+  ],
+  "businessHours": "16:00-02:00",
+  "location": {
+    "lng": 106.5743,
+    "lat": 29.6063
+  }
+}

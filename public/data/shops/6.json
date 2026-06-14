@@ -1,0 +1,18 @@
+{
+  "id": "6",
+  "name": "冰粉婆婆",
+  "category": "dessert",
+  "district": "yuzhong",
+  "address": "渝中区十八梯",
+  "description": "手工冰粉，夏天必来一碗",
+  "avgPrice": 8,
+  "recommendDishes": [
+    "冰粉",
+    "凉糕"
+  ],
+  "businessHours": "09:00-21:00",
+  "location": {
+    "lng": 106.576,
+    "lat": 29.554
+  }
+}

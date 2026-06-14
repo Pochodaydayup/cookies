@@ -9,13 +9,13 @@ public_folder: /images
 collections:
   - name: shops
     label: 店铺
-    folder: public/data
+    folder: public/data/shops
     create: true
     extension: json
     format: json
-    slug: "{{id}}"
+    slug: "{{year}}{{month}}{{day}}{{hour}}{{minute}}{{second}}"
+    identifier_field: name
     fields:
-      - { label: "店铺ID", name: "id", widget: "string", default: "" }
       - { label: "店名", name: "name", widget: "string" }
       - { label: "分类", name: "category", widget: "select", options:
           [

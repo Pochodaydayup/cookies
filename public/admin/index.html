@@ -9,63 +9,6 @@
 <body>
   <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
   <script>
-    // Auto-fill the ID field when creating a new entry
-    // Uses MutationObserver to reliably catch CMS rendering the field
-    (function() {
-      function generateId() {
-        return Date.now().toString(36) + Math.random().toString(36).substring(2, 6);
-      }
-
-      function tryFillId() {
-        // Try multiple selectors to find the ID input
-        var idInput =
-          document.querySelector('input[id$="-id"]') ||
-          document.querySelector('input[name="id"]') ||
-          document.querySelector('input[placeholder*="ID"]');
-
-        // Also try finding by label text "店铺ID"
-        if (!idInput) {
-          var labels = document.querySelectorAll('label');
-          for (var i = 0; i < labels.length; i++) {
-            if (labels[i].textContent.indexOf('店铺ID') !== -1) {
-              var forAttr = labels[i].getAttribute('for');
-              if (forAttr) {
-                idInput = document.getElementById(forAttr);
-              }
-              if (!idInput) {
-                idInput = labels[i].querySelector('input') ||
-                          labels[i].parentElement.querySelector('input');
-              }
-              break;
-            }
-          }
-        }
-
-        if (idInput && !idInput.value) {
-          idInput.value = generateId();
-          idInput.dispatchEvent(new Event('change', { bubbles: true }));
-          idInput.dispatchEvent(new Event('input', { bubbles: true }));
-          idInput.readOnly = true;
-          idInput.style.background = '#f5f6fa';
-          return true;
-        }
-        return false;
-      }
-
-      var observer = new MutationObserver(function() {
-        tryFillId();
-      });
-      observer.observe(document.body, { childList: true, subtree: true });
-
-      // Also try on interval as fallback
-      var interval = setInterval(function() {
-        if (tryFillId()) {
-          clearInterval(interval);
-          observer.disconnect();
-        }
-      }, 500);
-    })();
-
     // Replace the default login button with our redirect OAuth link
     var overrideInterval = setInterval(function() {
       var loginBtn = document.querySelector('button');

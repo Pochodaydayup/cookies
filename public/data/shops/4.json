@@ -1,0 +1,19 @@
+{
+  "id": "4",
+  "name": "烤匠烧烤",
+  "category": "bbq",
+  "district": "nanan",
+  "address": "南岸区南坪步行街",
+  "description": "深夜烧烤的灵魂归属",
+  "avgPrice": 55,
+  "recommendDishes": [
+    "烤脑花",
+    "烤苕皮",
+    "烤豆干"
+  ],
+  "businessHours": "18:00-03:00",
+  "location": {
+    "lng": 106.5614,
+    "lat": 29.5234
+  }
+}

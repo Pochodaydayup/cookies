@@ -1,0 +1,19 @@
+{
+  "id": "1",
+  "name": "老灶火锅",
+  "category": "hotpot",
+  "district": "yuzhong",
+  "address": "渝中区解放碑某巷12号",
+  "description": "正宗老火锅，麻辣鲜香，本地人排队也要吃",
+  "avgPrice": 85,
+  "recommendDishes": [
+    "毛肚",
+    "鸭肠",
+    "老肉片"
+  ],
+  "businessHours": "11:00-23:00",
+  "location": {
+    "lng": 106.5789,
+    "lat": 29.5584
+  }
+}
